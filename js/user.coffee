@@ -3,6 +3,7 @@ window.birdseye ?= {}
 class User
   status: ko.observable("signed-out")
   name: ko.observable()
+  organisationIds: ko.observableArray()
 
   constructor: ->
     @signedIn = ko.computed(() =>
@@ -10,13 +11,17 @@ class User
     )
 
   freshSignIn: () =>
+    @_clear()
     @signOut()
     @_signIn()
 
   signOut: () =>
     Trello.deauthorize()
     @status("signed-out")
+
+  _clear: () =>
     @name(null)
+    @organisationIds([])
 
   _signIn: () =>
     @status("signing-in")
@@ -25,7 +30,7 @@ class User
       name: "Birds eye",
       success: () =>
         @status("signed-in")
-        @_updateName()
+        @_update()
       ,
       error: @_error
     })
@@ -34,10 +39,12 @@ class User
     @signOut()
     console.log("Error: #{m}")
 
-  _updateName: () =>
+  _update: () =>
+    @_clear()
     Trello.members.get("me", {},
       (user) =>
         @name(user.fullName)
+        @organisationIds(user.idOrganizations)
       ,
       @_error
     )

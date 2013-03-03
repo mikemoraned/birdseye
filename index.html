@@ -24,14 +24,18 @@
 <script src="components/bootstrap/bootstrap/js/bootstrap.min.js"></script>
 <script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
 
+<script src="js/organisation.js"></script>
+<script src="js/errors.js"></script>
 <script src="js/user.js"></script>
 <script src="js/app.js"></script>
 
 <script>
-    var app = new birdseye.App();
-    ko.applyBindings(app);
+    $(function() {
+        var app = new birdseye.App();
+        ko.applyBindings(app);
 
-    app.user().freshSignIn();
+        app.user().freshSignIn();
+    })
 </script>
 
 </body>

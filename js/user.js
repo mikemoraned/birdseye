@@ -13,12 +13,16 @@
 
     User.prototype.name = ko.observable();
 
+    User.prototype.organisationIds = ko.observableArray();
+
     function User() {
-      this._updateName = __bind(this._updateName, this);
+      this._update = __bind(this._update, this);
 
       this._error = __bind(this._error, this);
 
       this._signIn = __bind(this._signIn, this);
+
+      this._clear = __bind(this._clear, this);
 
       this.signOut = __bind(this.signOut, this);
 
@@ -31,14 +35,19 @@
     }
 
     User.prototype.freshSignIn = function() {
+      this._clear();
       this.signOut();
       return this._signIn();
     };
 
     User.prototype.signOut = function() {
       Trello.deauthorize();
-      this.status("signed-out");
-      return this.name(null);
+      return this.status("signed-out");
+    };
+
+    User.prototype._clear = function() {
+      this.name(null);
+      return this.organisationIds([]);
     };
 
     User.prototype._signIn = function() {
@@ -49,7 +58,7 @@
         name: "Birds eye",
         success: function() {
           _this.status("signed-in");
-          return _this._updateName();
+          return _this._update();
         },
         error: this._error
       });
@@ -60,10 +69,12 @@
       return console.log("Error: " + m);
     };
 
-    User.prototype._updateName = function() {
+    User.prototype._update = function() {
       var _this = this;
+      this._clear();
       return Trello.members.get("me", {}, function(user) {
-        return _this.name(user.fullName);
+        _this.name(user.fullName);
+        return _this.organisationIds(user.idOrganizations);
       }, this._error);
     };
 
