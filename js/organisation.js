@@ -9,27 +9,69 @@
 
   Organisation = (function() {
 
-    Organisation.prototype.name = ko.observable();
-
-    function Organisation(id, name) {
+    function Organisation(id, name, errors) {
       this.id = id;
+      this.errors = errors;
+      this._error = __bind(this._error, this);
+
+      this._memberships = __bind(this._memberships, this);
+
       this._loadBoards = __bind(this._loadBoards, this);
 
-      this._loadUsers = __bind(this._loadUsers, this);
+      this._loadMembers = __bind(this._loadMembers, this);
 
       this.loadAll = __bind(this.loadAll, this);
 
-      this.name(name);
+      this.name = ko.observable(name);
+      this.members = ko.observableArray();
+      this.boards = ko.observableArray();
     }
 
     Organisation.prototype.loadAll = function() {
-      this._loadUsers();
+      this._loadMembers();
       return this._loadBoards();
     };
 
-    Organisation.prototype._loadUsers = function() {};
+    Organisation.prototype._loadMembers = function() {
+      var _this = this;
+      this.members([]);
+      return Trello.organizations.get("" + this.id + "/members", {}, function(data) {
+        return data.forEach(function(m) {
+          var member;
+          member = new birdseye.Member(m.id, m.fullName, m.username);
+          return _this.members.push(member);
+        });
+      }, this._error);
+    };
 
-    Organisation.prototype._loadBoards = function() {};
+    Organisation.prototype._loadBoards = function() {
+      var _this = this;
+      this.boards([]);
+      return Trello.organizations.get("" + this.id + "/boards", {}, function(data) {
+        return data.forEach(function(b) {
+          var board;
+          board = new birdseye.Board(b.id, b.name, _this._memberships(b.memberships));
+          return _this.boards.push(board);
+        });
+      }, this._error);
+    };
+
+    Organisation.prototype._memberships = function(data) {
+      var list,
+        _this = this;
+      list = [];
+      data.forEach(function(m) {
+        if (!m.deactivated) {
+          return list.push(new birdseye.Membership(m.idMember, m.memberType, true));
+        }
+      });
+      return list;
+    };
+
+    Organisation.prototype._error = function(m) {
+      this.errors().add(m);
+      return console.log("App: Error: " + m);
+    };
 
     return Organisation;
 

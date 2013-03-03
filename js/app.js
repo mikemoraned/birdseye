@@ -35,7 +35,7 @@
         console.log("Fetching org with id: " + id);
         return Trello.organizations.get(id, {}, function(data) {
           var org;
-          org = new birdseye.Organisation(id, data.displayName);
+          org = new birdseye.Organisation(id, data.displayName, _this.errors());
           _this.organisations.push(org);
           if (_this.organisations.length === 1) {
             return _this.selectedOrganisation(org);

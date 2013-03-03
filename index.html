@@ -19,11 +19,24 @@
     <select id="organisations" data-bind="options: organisations, value: selectedOrganisation, optionsText: 'name', enable: organisations().length > 0"></select>
 </form>
 
+<div data-bind="visible: selectedOrganisation, with: selectedOrganisation">
+    <div data-bind="foreach: boards">
+        <div data-bind="text: name"></div>
+    </div>
+
+    <div data-bind="foreach: members">
+        <div data-bind="text: fullName"></div>
+    </div>
+</div>
+
 <script src="components/knockoutjs/build/output/knockout-latest.js"></script>
 <script src="components/jquery/jquery.min.js"></script>
 <script src="components/bootstrap/bootstrap/js/bootstrap.min.js"></script>
 <script src="https://api.trello.com/1/client.js?key=afaec27e30009b0b1cfb14d85f384ee1"></script>
 
+<script src="js/board.js"></script>
+<script src="js/membership.js"></script>
+<script src="js/member.js"></script>
 <script src="js/organisation.js"></script>
 <script src="js/errors.js"></script>
 <script src="js/user.js"></script>

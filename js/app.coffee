@@ -19,7 +19,7 @@ class App
       console.log("Fetching org with id: #{id}")
       Trello.organizations.get(id, {},
         (data) =>
-          org = new birdseye.Organisation(id, data.displayName)
+          org = new birdseye.Organisation(id, data.displayName, @errors())
           @organisations.push(org)
           if @organisations.length == 1
             @selectedOrganisation(org)
