@@ -25,6 +25,8 @@
     <input id="member-filter" data-bind="value: memberFilter, valueUpdate: 'afterkeydown'">
     <label for="admins-filter">Admins only?</label>
     <input id="admins-filter" type="checkbox" data-bind="checked: adminsOnly">
+    <label for="non-org-filter">Non-org only?</label>
+    <input id="non-org-filter" type="checkbox" data-bind="checked: nonOrgOnly">
 </form>
 
 <div data-bind="visible: selectedOrganisation, with: selectedOrganisation">
