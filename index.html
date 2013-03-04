@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Birdseye</title>
+    <title>Birds Eye</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="components/bootstrap/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -15,6 +15,7 @@
 <div id="user" data-bind="with: user">
     <span data-bind="text: status"></span>
     <span data-bind="text: name"></span>
+    <button data-bind="click: signOut, enable: signedIn">Sign out</button>
 </div>
 
 <form class="well well-small form-inline">

@@ -16,6 +16,7 @@ class User
     @_signIn()
 
   signOut: () =>
+    @_clear()
     Trello.deauthorize()
     @status("signed-out")
 
@@ -27,7 +28,7 @@ class User
     @status("signing-in")
     Trello.authorize({
       type: "popup",
-      name: "Birds eye",
+      name: "Birds Eye",
       success: () =>
         @status("signed-in")
         @_update()

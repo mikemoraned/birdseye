@@ -18,8 +18,10 @@
     }
 
     Member.prototype.matches = function(filter) {
+      var f;
       if (filter != null) {
-        return this.fullName().toLowerCase().indexOf(filter) >= 0 || this.username().indexOf(filter) >= 0;
+        f = filter.toLowerCase();
+        return this.fullName().toLowerCase().indexOf(f) >= 0 || this.username().indexOf(f) >= 0;
       } else {
         return true;
       }

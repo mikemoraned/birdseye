@@ -41,6 +41,7 @@
     };
 
     User.prototype.signOut = function() {
+      this._clear();
       Trello.deauthorize();
       return this.status("signed-out");
     };
@@ -55,7 +56,7 @@
       this.status("signing-in");
       return Trello.authorize({
         type: "popup",
-        name: "Birds eye",
+        name: "Birds Eye",
         success: function() {
           _this.status("signed-in");
           return _this._update();

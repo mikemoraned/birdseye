@@ -8,7 +8,8 @@ class Member
 
   matches: (filter) =>
     if filter?
-      @fullName().toLowerCase().indexOf(filter) >= 0 or @username().indexOf(filter) >= 0
+      f = filter.toLowerCase()
+      @fullName().toLowerCase().indexOf(f) >= 0 or @username().indexOf(f) >= 0
     else
       true
 
