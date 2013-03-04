@@ -8,8 +8,8 @@
 
   Membership = (function() {
 
-    function Membership(idMember, type, isMember) {
-      this.idMember = ko.observable(idMember);
+    function Membership(member, type, isMember) {
+      this.member = ko.observable(member);
       this.type = ko.observable(type);
       this.isMember = ko.observable(isMember);
     }

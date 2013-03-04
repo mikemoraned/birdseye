@@ -2,8 +2,8 @@ window.birdseye ?= {}
 
 class Membership
 
-  constructor: (idMember, type, isMember) ->
-    @idMember = ko.observable(idMember)
+  constructor: (member, type, isMember) ->
+    @member = ko.observable(member)
     @type = ko.observable(type)
     @isMember = ko.observable(isMember)
 

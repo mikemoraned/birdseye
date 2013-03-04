@@ -7,16 +7,18 @@ class Organisation
     @boards = ko.observableArray()
 
   loadAll: () =>
-    @_loadMembers()
-    @_loadBoards()
+    @members([])
+    @boards([])
+    @_loadMembers(@_loadBoards)
 
-  _loadMembers: () =>
+  _loadMembers: (onSuccess) =>
     @members([])
     Trello.organizations.get("#{@id}/members", {},
       (data) =>
         data.forEach((m) =>
-          member = new birdseye.Member(m.id, m.fullName, m.username)
+          member = new birdseye.Member(m.id, m.fullName, m.username, m.initials)
           @members.push(member))
+        onSuccess()
       ,
       @_error)
 
@@ -33,8 +35,14 @@ class Organisation
   _memberships: (data) =>
     list = []
     data.forEach((m) =>
+      membershipTypeMap = {}
       if !m.deactivated
-        list.push(new birdseye.Membership(m.idMember, m.memberType, true))
+        membershipTypeMap[m.idMember] = m.memberType
+      @members().forEach((member) =>
+        membershipType = membershipTypeMap[member.id]
+        if membershipType?
+          list.push(new birdseye.Membership(member, membershipType, true))
+      )
     )
     list
 

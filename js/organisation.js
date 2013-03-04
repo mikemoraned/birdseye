@@ -28,19 +28,21 @@
     }
 
     Organisation.prototype.loadAll = function() {
-      this._loadMembers();
-      return this._loadBoards();
+      this.members([]);
+      this.boards([]);
+      return this._loadMembers(this._loadBoards);
     };
 
-    Organisation.prototype._loadMembers = function() {
+    Organisation.prototype._loadMembers = function(onSuccess) {
       var _this = this;
       this.members([]);
       return Trello.organizations.get("" + this.id + "/members", {}, function(data) {
-        return data.forEach(function(m) {
+        data.forEach(function(m) {
           var member;
-          member = new birdseye.Member(m.id, m.fullName, m.username);
+          member = new birdseye.Member(m.id, m.fullName, m.username, m.initials);
           return _this.members.push(member);
         });
+        return onSuccess();
       }, this._error);
     };
 
@@ -61,9 +63,18 @@
         _this = this;
       list = [];
       data.forEach(function(m) {
+        var membershipTypeMap;
+        membershipTypeMap = {};
         if (!m.deactivated) {
-          return list.push(new birdseye.Membership(m.idMember, m.memberType, true));
+          membershipTypeMap[m.idMember] = m.memberType;
         }
+        return _this.members().forEach(function(member) {
+          var membershipType;
+          membershipType = membershipTypeMap[member.id];
+          if (membershipType != null) {
+            return list.push(new birdseye.Membership(member, membershipType, true));
+          }
+        });
       });
       return list;
     };

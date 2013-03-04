@@ -22,10 +22,9 @@
 <div data-bind="visible: selectedOrganisation, with: selectedOrganisation">
     <div data-bind="foreach: boards">
         <div data-bind="text: name"></div>
-    </div>
-
-    <div data-bind="foreach: members">
-        <div data-bind="text: fullName"></div>
+        <div data-bind="foreach: memberships">
+            <span data-bind="text: member().fullName"></span> (<span data-bind="text: type"></span>),
+        </div>
     </div>
 </div>
 
