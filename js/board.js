@@ -9,22 +9,36 @@
 
   Board = (function() {
 
-    function Board(id, name, memberships, memberFilter) {
+    function Board(id, name, url, memberships, memberFilter, adminsOnly) {
       var _this = this;
       this.id = id;
-      this._filterBy = __bind(this._filterBy, this);
+      this._filterByAdmin = __bind(this._filterByAdmin, this);
+
+      this._filterByName = __bind(this._filterByName, this);
 
       this.name = ko.observable(name);
+      this.url = ko.observable(url);
       this.memberships = ko.computed(function() {
-        return _this._filterBy(memberFilter, memberships);
+        return _this._filterByAdmin(adminsOnly, _this._filterByName(memberFilter, memberships));
       });
     }
 
-    Board.prototype._filterBy = function(memberFilter, memberships) {
+    Board.prototype._filterByName = function(memberFilter, memberships) {
       var _this = this;
       if (memberFilter() != null) {
         return memberships.filter(function(m) {
           return m.member().matches(memberFilter());
+        });
+      } else {
+        return memberships;
+      }
+    };
+
+    Board.prototype._filterByAdmin = function(adminsOnly, memberships) {
+      var _this = this;
+      if (adminsOnly()) {
+        return memberships.filter(function(m) {
+          return m.type() === 'admin';
         });
       } else {
         return memberships;

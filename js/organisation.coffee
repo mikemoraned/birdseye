@@ -1,7 +1,7 @@
 window.birdseye ?= {}
 
 class Organisation
-  constructor: (@id, name, @errors, @memberFilter) ->
+  constructor: (@id, name, @errors, @memberFilter, @adminsOnly) ->
     @name = ko.observable(name)
     @members = ko.observableArray()
     @boards = ko.observableArray()
@@ -27,7 +27,7 @@ class Organisation
     Trello.organizations.get("#{@id}/boards", {},
       (data) =>
         data.forEach((b) =>
-          board = new birdseye.Board(b.id, b.name, @_memberships(b.memberships), @memberFilter)
+          board = new birdseye.Board(b.id, b.name, b.url, @_memberships(b.memberships), @memberFilter, @adminsOnly)
           @boards.push(board))
       ,
       @_error)
