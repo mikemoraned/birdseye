@@ -79,7 +79,8 @@
             return list.push(new birdseye.Membership(orgMember, m.memberType, true));
           } else {
             unknownMember = new birdseye.Member(m.idMember, "unknown", "unknown");
-            return list.push(new birdseye.Membership(unknownMember, m.memberType, false));
+            list.push(new birdseye.Membership(unknownMember, m.memberType, false));
+            return unknownMember.update();
           }
         }
       });

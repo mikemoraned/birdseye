@@ -11,11 +11,23 @@
 
     function Member(id, fullName, username) {
       this.id = id;
+      this._error = __bind(this._error, this);
+
       this.matches = __bind(this.matches, this);
+
+      this.update = __bind(this.update, this);
 
       this.fullName = ko.observable(fullName);
       this.username = ko.observable(username);
     }
+
+    Member.prototype.update = function() {
+      var _this = this;
+      return Trello.members.get("" + this.id, {}, function(data) {
+        _this.fullName(data.fullName);
+        return _this.username(data.username);
+      }, this._error);
+    };
 
     Member.prototype.matches = function(filter) {
       var f;
@@ -25,6 +37,10 @@
       } else {
         return true;
       }
+    };
+
+    Member.prototype._error = function(m) {
+      return console.log("Error: " + m);
     };
 
     return Member;

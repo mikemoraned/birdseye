@@ -47,6 +47,7 @@ class Organisation
         else
           unknownMember = new birdseye.Member(m.idMember, "unknown", "unknown")
           list.push(new birdseye.Membership(unknownMember, m.memberType, false))
+          unknownMember.update()
     )
     list
 
