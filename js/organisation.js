@@ -9,11 +9,12 @@
 
   Organisation = (function() {
 
-    function Organisation(id, name, errors, memberFilter, adminsOnly) {
+    function Organisation(id, name, errors, memberFilter, adminsOnly, nonOrgOnly) {
       this.id = id;
       this.errors = errors;
       this.memberFilter = memberFilter;
       this.adminsOnly = adminsOnly;
+      this.nonOrgOnly = nonOrgOnly;
       this._error = __bind(this._error, this);
 
       this._memberships = __bind(this._memberships, this);
@@ -49,34 +50,39 @@
     };
 
     Organisation.prototype._loadBoards = function() {
-      var _this = this;
+      var membersById,
+        _this = this;
       this.boards([]);
+      membersById = {};
+      this.members().forEach(function(m) {
+        return membersById[m.id] = m;
+      });
       return Trello.organizations.get("" + this.id + "/boards", {}, function(data) {
         return data.forEach(function(b) {
           var board;
-          board = new birdseye.Board(b.id, b.name, b.url, _this._memberships(b.memberships), _this.memberFilter, _this.adminsOnly);
+          board = new birdseye.Board(b.id, b.name, b.url, _this._memberships(membersById, b.memberships), _this.memberFilter, _this.adminsOnly, _this.nonOrgOnly);
           return _this.boards.push(board);
         });
       }, this._error);
     };
 
-    Organisation.prototype._memberships = function(data) {
+    Organisation.prototype._memberships = function(orgMembersById, data) {
       var list,
         _this = this;
       list = [];
       data.forEach(function(m) {
-        var membershipTypeMap;
+        var membershipTypeMap, orgMember, unknownMember;
         membershipTypeMap = {};
         if (!m.deactivated) {
-          membershipTypeMap[m.idMember] = m.memberType;
-        }
-        return _this.members().forEach(function(member) {
-          var membershipType;
-          membershipType = membershipTypeMap[member.id];
-          if (membershipType != null) {
-            return list.push(new birdseye.Membership(member, membershipType, true));
+          orgMember = orgMembersById[m.idMember];
+          if (orgMember != null) {
+            return list.push(new birdseye.Membership(orgMember, m.memberType, true));
+          } else {
+            unknownMember = new birdseye.Member(m.idMember, "unknown", "unknown");
+            list.push(new birdseye.Membership(unknownMember, m.memberType, false));
+            return unknownMember.update();
           }
-        });
+        }
       });
       return list;
     };

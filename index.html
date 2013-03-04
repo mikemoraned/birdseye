@@ -25,16 +25,21 @@
     <input id="member-filter" data-bind="value: memberFilter, valueUpdate: 'afterkeydown'">
     <label for="admins-filter">Admins only?</label>
     <input id="admins-filter" type="checkbox" data-bind="checked: adminsOnly">
+    <label for="non-org-filter">Non-org only?</label>
+    <input id="non-org-filter" type="checkbox" data-bind="checked: nonOrgOnly">
 </form>
 
 <div data-bind="visible: selectedOrganisation, with: selectedOrganisation">
     <table>
         <thead>
-            <th>Board</th><th>Members</th>
+            <th>Board</th><th>Member count</th><th>Members (filtered)</th>
         </thead>
         <tbody data-bind="foreach: boards">
             <tr>
                 <td><a data-bind="attr: { href: url }, text: name"></a></td>
+                <td>
+                    <span data-bind="text: totalMembers"></span>
+                </td>
                 <td>
                     <div data-bind="foreach: memberships">
                         <span data-bind="text: member().fullName, attr: { title: type }"></span>,

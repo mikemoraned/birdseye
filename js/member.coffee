@@ -6,11 +6,22 @@ class Member
     @fullName = ko.observable(fullName)
     @username = ko.observable(username)
 
+  update: () =>
+    Trello.members.get("#{@id}", {},
+    (data) =>
+      @fullName(data.fullName)
+      @username(data.username)
+    ,
+    @_error)
+
   matches: (filter) =>
-    if filter?
+    if filter? and (@fullName()? or @username()?)
       f = filter.toLowerCase()
       @fullName().toLowerCase().indexOf(f) >= 0 or @username().indexOf(f) >= 0
     else
       true
+
+  _error: (m) =>
+    console.log("Error: #{m}")
 
 window.birdseye.Member = Member

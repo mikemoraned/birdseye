@@ -8,10 +8,10 @@
 
   Membership = (function() {
 
-    function Membership(member, type, isMember) {
+    function Membership(member, type, orgMember) {
       this.member = ko.observable(member);
       this.type = ko.observable(type);
-      this.isMember = ko.observable(isMember);
+      this.orgMember = ko.observable(orgMember);
     }
 
     return Membership;

@@ -9,17 +9,20 @@
 
   Board = (function() {
 
-    function Board(id, name, url, memberships, memberFilter, adminsOnly) {
+    function Board(id, name, url, memberships, memberFilter, adminsOnly, nonOrgOnly) {
       var _this = this;
       this.id = id;
+      this._filterByNonOrgOnly = __bind(this._filterByNonOrgOnly, this);
+
       this._filterByAdmin = __bind(this._filterByAdmin, this);
 
       this._filterByName = __bind(this._filterByName, this);
 
       this.name = ko.observable(name);
       this.url = ko.observable(url);
+      this.totalMembers = ko.observable(memberships.length);
       this.memberships = ko.computed(function() {
-        return _this._filterByAdmin(adminsOnly, _this._filterByName(memberFilter, memberships));
+        return _this._filterByNonOrgOnly(nonOrgOnly, _this._filterByAdmin(adminsOnly, _this._filterByName(memberFilter, memberships)));
       });
     }
 
@@ -39,6 +42,17 @@
       if (adminsOnly()) {
         return memberships.filter(function(m) {
           return m.type() === 'admin';
+        });
+      } else {
+        return memberships;
+      }
+    };
+
+    Board.prototype._filterByNonOrgOnly = function(nonOrgOnly, memberships) {
+      var _this = this;
+      if (nonOrgOnly()) {
+        return memberships.filter(function(m) {
+          return !m.orgMember();
         });
       } else {
         return memberships;
