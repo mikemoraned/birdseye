@@ -5,6 +5,7 @@ class Board
   constructor: (@id, name, url, memberships, memberFilter, adminsOnly) ->
     @name = ko.observable(name)
     @url = ko.observable(url)
+    @totalMembers = ko.observable(memberships.length)
     @memberships = ko.computed(() =>
       @_filterByAdmin(adminsOnly, @_filterByName(memberFilter, memberships)))
 

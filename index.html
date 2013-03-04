@@ -30,11 +30,14 @@
 <div data-bind="visible: selectedOrganisation, with: selectedOrganisation">
     <table>
         <thead>
-            <th>Board</th><th>Members</th>
+            <th>Board</th><th>Member count</th><th>Members (filtered)</th>
         </thead>
         <tbody data-bind="foreach: boards">
             <tr>
                 <td><a data-bind="attr: { href: url }, text: name"></a></td>
+                <td>
+                    <span data-bind="text: totalMembers"></span>
+                </td>
                 <td>
                     <div data-bind="foreach: memberships">
                         <span data-bind="text: member().fullName, attr: { title: type }"></span>,

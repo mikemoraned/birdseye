@@ -7,7 +7,7 @@ class Member
     @username = ko.observable(username)
 
   matches: (filter) =>
-    if filter?
+    if filter? and (@fullName()? or @username()?)
       f = filter.toLowerCase()
       @fullName().toLowerCase().indexOf(f) >= 0 or @username().indexOf(f) >= 0
     else

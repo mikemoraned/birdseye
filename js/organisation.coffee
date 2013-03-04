@@ -24,25 +24,29 @@ class Organisation
 
   _loadBoards: () =>
     @boards([])
+    membersById = {}
+    @members().forEach((m) =>
+      membersById[m.id] = m
+    )
     Trello.organizations.get("#{@id}/boards", {},
       (data) =>
         data.forEach((b) =>
-          board = new birdseye.Board(b.id, b.name, b.url, @_memberships(b.memberships), @memberFilter, @adminsOnly)
+          board = new birdseye.Board(b.id, b.name, b.url, @_memberships(membersById, b.memberships), @memberFilter, @adminsOnly)
           @boards.push(board))
       ,
       @_error)
 
-  _memberships: (data) =>
+  _memberships: (orgMembersById, data) =>
     list = []
     data.forEach((m) =>
       membershipTypeMap = {}
       if !m.deactivated
-        membershipTypeMap[m.idMember] = m.memberType
-      @members().forEach((member) =>
-        membershipType = membershipTypeMap[member.id]
-        if membershipType?
-          list.push(new birdseye.Membership(member, membershipType, true))
-      )
+        orgMember = orgMembersById[m.idMember]
+        if orgMember?
+          list.push(new birdseye.Membership(orgMember, m.memberType, true))
+        else
+          unknownMember = new birdseye.Member(m.idMember, "unknown", "unknown")
+          list.push(new birdseye.Membership(unknownMember, m.memberType, false))
     )
     list
 

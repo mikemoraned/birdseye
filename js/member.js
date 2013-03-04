@@ -19,7 +19,7 @@
 
     Member.prototype.matches = function(filter) {
       var f;
-      if (filter != null) {
+      if ((filter != null) && ((this.fullName() != null) || (this.username() != null))) {
         f = filter.toLowerCase();
         return this.fullName().toLowerCase().indexOf(f) >= 0 || this.username().indexOf(f) >= 0;
       } else {

@@ -18,6 +18,7 @@
 
       this.name = ko.observable(name);
       this.url = ko.observable(url);
+      this.totalMembers = ko.observable(memberships.length);
       this.memberships = ko.computed(function() {
         return _this._filterByAdmin(adminsOnly, _this._filterByName(memberFilter, memberships));
       });
