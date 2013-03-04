@@ -9,9 +9,10 @@
 
   Organisation = (function() {
 
-    function Organisation(id, name, errors) {
+    function Organisation(id, name, errors, memberFilter) {
       this.id = id;
       this.errors = errors;
+      this.memberFilter = memberFilter;
       this._error = __bind(this._error, this);
 
       this._memberships = __bind(this._memberships, this);
@@ -52,7 +53,7 @@
       return Trello.organizations.get("" + this.id + "/boards", {}, function(data) {
         return data.forEach(function(b) {
           var board;
-          board = new birdseye.Board(b.id, b.name, _this._memberships(b.memberships));
+          board = new birdseye.Board(b.id, b.name, _this._memberships(b.memberships), _this.memberFilter);
           return _this.boards.push(board);
         });
       }, this._error);

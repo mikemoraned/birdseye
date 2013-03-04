@@ -20,6 +20,8 @@
 <form class="well well-small form-inline">
     <label for="organisations">Organisation</label>
     <select id="organisations" data-bind="options: organisations, value: selectedOrganisation, optionsText: 'name', enable: organisations().length > 0"></select>
+    <label for="member-filter">Member filter</label>
+    <input id="member-filter" data-bind="value: memberFilter, valueUpdate: 'afterkeydown'">
 </form>
 
 <div data-bind="visible: selectedOrganisation, with: selectedOrganisation">

@@ -7,6 +7,7 @@ class App
     @selectedOrganisation = ko.observable()
     @user = ko.observable(new birdseye.User())
     @errors = ko.observable(new birdseye.Errors())
+    @memberFilter = ko.observable("")
     @user().organisationIds.subscribe(@_fetchOrganisations)
     @selectedOrganisation.subscribe((org) =>
       if org?
@@ -19,7 +20,7 @@ class App
       console.log("Fetching org with id: #{id}")
       Trello.organizations.get(id, {},
         (data) =>
-          org = new birdseye.Organisation(id, data.displayName, @errors())
+          org = new birdseye.Organisation(id, data.displayName, @errors(), @memberFilter)
           @organisations.push(org)
           if @organisations.length == 1
             @selectedOrganisation(org)

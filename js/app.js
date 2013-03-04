@@ -19,6 +19,7 @@
       this.selectedOrganisation = ko.observable();
       this.user = ko.observable(new birdseye.User());
       this.errors = ko.observable(new birdseye.Errors());
+      this.memberFilter = ko.observable("");
       this.user().organisationIds.subscribe(this._fetchOrganisations);
       this.selectedOrganisation.subscribe(function(org) {
         if (org != null) {
@@ -35,7 +36,7 @@
         console.log("Fetching org with id: " + id);
         return Trello.organizations.get(id, {}, function(data) {
           var org;
-          org = new birdseye.Organisation(id, data.displayName, _this.errors());
+          org = new birdseye.Organisation(id, data.displayName, _this.errors(), _this.memberFilter);
           _this.organisations.push(org);
           if (_this.organisations.length === 1) {
             return _this.selectedOrganisation(org);
