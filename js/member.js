@@ -23,13 +23,15 @@
       };
       this.fullName = ko.observable(fullName);
       this.username = ko.observable(username);
+      this.home = ko.observable();
     }
 
     Member.prototype.update = function() {
       var _this = this;
       return Trello.members.get("" + this.id, {}, function(data) {
         _this.fullName(data.fullName);
-        return _this.username(data.username);
+        _this.username(data.username);
+        return _this.home(data.url);
       }, this._error);
     };
 

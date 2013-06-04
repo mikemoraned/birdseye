@@ -16,7 +16,7 @@ class Organisation
     Trello.organizations.get("#{@id}/members", {},
       (data) =>
         data.forEach((m) =>
-          member = new birdseye.Member(m.id, m.fullName, m.username, m.initials)
+          member = new birdseye.Member(m.id, m.fullName, m.username)
           @members.push(member))
         onSuccess()
       ,
@@ -27,6 +27,7 @@ class Organisation
     membersById = {}
     @members().forEach((m) =>
       membersById[m.id] = m
+      m.update()
     )
     Trello.organizations.get("#{@id}/boards", {},
       (data) =>

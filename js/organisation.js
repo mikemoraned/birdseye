@@ -48,7 +48,7 @@
       return Trello.organizations.get("" + this.id + "/members", {}, function(data) {
         data.forEach(function(m) {
           var member;
-          member = new birdseye.Member(m.id, m.fullName, m.username, m.initials);
+          member = new birdseye.Member(m.id, m.fullName, m.username);
           return _this.members.push(member);
         });
         return onSuccess();
@@ -61,7 +61,8 @@
       this.boards([]);
       membersById = {};
       this.members().forEach(function(m) {
-        return membersById[m.id] = m;
+        membersById[m.id] = m;
+        return m.update();
       });
       return Trello.organizations.get("" + this.id + "/boards", {}, function(data) {
         return data.forEach(function(b) {

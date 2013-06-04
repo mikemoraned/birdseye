@@ -5,12 +5,14 @@ class Member
   constructor: (@id, fullName, username) ->
     @fullName = ko.observable(fullName)
     @username = ko.observable(username)
+    @home = ko.observable()
 
   update: () =>
     Trello.members.get("#{@id}", {},
     (data) =>
       @fullName(data.fullName)
       @username(data.username)
+      @home(data.url)
     ,
     @_error)
 

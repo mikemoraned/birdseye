@@ -36,13 +36,15 @@
         </thead>
         <tbody data-bind="foreach: boards">
             <tr>
-                <td><a data-bind="attr: { href: url }, text: name"></a></td>
+                <td><a data-bind="attr: { href: url }, text: name" target="_blank"></a></td>
                 <td>
                     <span data-bind="text: totalMembers"></span>
                 </td>
                 <td>
                     <div data-bind="foreach: memberships">
-                        <span data-bind="text: member().fullName, attr: { title: type }"></span>,
+                        <a data-bind="attr: { href: member().home }" target="_blank">
+                            <span data-bind="text: member().fullName, attr: { title: type }"></span>
+                        </a>,
                     </div>
                 </td>
             </tr>
