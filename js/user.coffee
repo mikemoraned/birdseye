@@ -27,7 +27,7 @@ class User
   _signIn: () =>
     @status("signing-in")
     Trello.authorize({
-      type: "popup",
+      type: "redirect",
       name: "Birds Eye",
       success: () =>
         @status("signed-in")
